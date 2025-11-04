@@ -1,0 +1,66 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block content %}
+<div class="wrapper" style="direction: rtl;">
+  <!-- محتوى الصفحة -->
+  <div class="content-wrapper py-4 px-3">
+    <div class="container">
+      <!-- عنوان الصفحة -->
+      <div class="row mb-4">
+        <div class="col text-center">
+          <h1 class="text-primary"><i class="fas fa-book-open me-2"></i> قائمة الكتب</h1>
+          <hr class="border border-primary border-2 opacity-50 w-25 mx-auto">
+        </div>
+      </div>
+
+      <!-- محتوى البطاقات -->
+      <div class="row d-flex align-items-stretch g-4">
+        {% for book in books %}
+        <div class="col-lg-4 col-md-6 col-sm-12 mb-4 bookhide book{{book.category.id}} book{{book.status}}">
+          <div class="card shadow rounded-3 h-100 bg-light border-0">
+            <div class="card-header bg-white border-0">
+              <span class="badge bg-info px-3 py-2 fs-6">{{ book.category }}</span>
+            </div>
+
+            <div class="card-body pt-3">
+              <div class="row">
+                <div class="col-7">
+                  <h5 class="fw-bold text-dark">{{ book.title }}</h5>
+                  <ul class="list-unstyled small text-secondary mt-2">
+                    <li>الحالة: <span class="fw-semibold text-dark">{{ book.status }}</span></li>
+                    {% if book.price %}
+                    <li>السعر: <span class="fw-semibold text-success">{{ book.price }} دج</span></li>
+                    {% else %}
+                    <li>سعر الإيجار (لليوم): <span class="fw-semibold text-success">{{ book.retal_price_day }} دج</span></li>
+                    {% endif %}
+                  </ul>
+                </div>
+                <div class="col-5 d-flex justify-content-center align-items-center">
+                  {% if book.book_image %}
+                  <img src="{{ book.book_image.url }}" alt="Book Image"
+                    class="img-fluid rounded-circle border border-secondary" style="height: 100px; width: 100px;">
+                  {% else %}
+                  <img src="{% static 'dist/img/defult.jpg' %}" alt="Default"
+                    class="img-fluid rounded-circle border border-secondary" style="height: 100px; width: 100px;">
+                  {% endif %}
+                </div>
+              </div>
+            </div>
+
+            <div class="card-footer bg-transparent border-0 text-end">
+              <a href="{% url 'delete' book.id %}" class="btn btn-sm btn-danger me-2">
+                <i class="fas fa-trash-alt"></i>
+              </a>
+              <a href="{% url 'update' book.id %}" class="btn btn-sm btn-primary">
+                <i class="fas fa-edit me-1"></i> تعديل
+              </a>
+            </div>
+          </div>
+        </div>
+        {% endfor %}
+      </div>
+    </div>
+  </div>
+</div>
+{% endblock %}

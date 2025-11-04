@@ -1,0 +1,60 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="container mt-4">
+  <h1 class=" m-3">معلومات العملاء</h1>
+
+  <form method="get" class="row g-3 mb-3">
+    <div class="col-md-4">
+      <input type="text" name="q" placeholder="ابحث باسم العميل" value="{{ query }}" class="form-control">
+    </div>
+    <div class="col-md-4">
+      <input type="date" name="date" value="{{ date_query }}" class="form-control">
+    </div>
+    <div class="col-md-4 d-flex">
+      <button type="submit" class="btn btn-primary me-2">بحث</button>
+      <a href="{% url 'clients_info' %}" class="btn btn-secondary">إعادة تعيين</a>
+    </div>
+  </form>
+
+  <table class="table table-bordered table-hover text-center">
+    <thead class="table-info">
+      <tr>
+        <th>العميل</th>
+        <th>الهاتف</th>
+        <th>العنوان</th>
+        <th>الكتاب</th>
+        <th>نوع العملية</th>
+        <th>السعر</th>
+        <th>المدة (أيام)</th>
+        <th>تاريخ العملية</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for book in books %}
+      <tr>
+        <td>{{ book.client_name }}</td>
+        <td>{{ book.client_phone }}</td>
+        <td>{{ book.client_address }}</td>
+        <td>{{ book.title }}</td>
+        <td>{{ book.get_status_display }}</td>
+        <td>
+          {% if book.status == 'sold' %}
+            {{ book.price }}
+          {% else %}
+            {{ book.total_rental }}
+          {% endif %}
+        </td>
+        <td>
+          {% if book.status == 'rental' %}
+            {{ book.retal_period }}
+          {% else %}
+            -
+          {% endif %}
+        </td>
+        <td>{{ book.created_at|date:"Y-m-d H:i" }}</td>
+      </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+{% endblock %}
